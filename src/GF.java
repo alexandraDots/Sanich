@@ -91,16 +91,16 @@ public class GF {
             return multiply(powGF(square, n / 2), a); // a * (a*a)^[n/2]
         }
     }
- // 0 = нулевая степень
+    // 0 = нулевая степень
     public int powGFByIndex(int a , int b) {
         int res;
-        if (a == 0 || b == 0) return 0;
+        if (a == 0 || b == 0) return 1;
         res = a * b;
         if (res >= arr.length - 1)
             res = res % (arr.length - 1);
         while (res < 0)
             res += arr.length - 1;
-        return res;
+        return arr[res + 1];
     }
 
     int divideByIndex(int a, int b) {
