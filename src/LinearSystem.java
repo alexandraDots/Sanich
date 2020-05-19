@@ -3,42 +3,47 @@ import java.util.ArrayList;
 import static java.lang.Math.pow;
 
 public class LinearSystem {
-    private static GF field = new GF((byte) 5);
+    private static int m = 5;
+    private static GF field = new GF((byte) m);
     private int[][] system;
     //решение системы
     private int[] ai;
+    private int[] Syndrome;
 
-    public static void setP(int p) {
-        P = p;
-    }
+    public  boolean[] sign (int[] S, int t) {
 
-    private static int P = 0;
-
-
-    public LinearSystem(int t, boolean[] c) {
         do {
-            generateSystem(t, c);
+            generateSystem(t, S);
             ai = findSolution();
             if (!isLinearlyIndependent())
                 t--;
         } while (!isLinearlyIndependent() && t != 0);
-        //просто выйти если t == 0
+
+        //проверка
+           boolean[] e = new boolean[(int) Math.pow(2,m)];
+        //если t == 0 проверить S = 0
         if (t != 0) {
-            boolean[] e = new boolean[c.length];
             for (Integer i : findRoots()) {
                 e[i] = true;
             }
-            boolean flag = true;
-            for (int i = 1; i < 2 * t; i++) {
-                if (generateS(i, e) != generateS(i, c)) {
-                    flag = false;
+            Syndrome = new int[2 * t];
+            for (int i = 0; i < 2 * t; i++) {
+                //S[0] = S1
+                    Syndrome[i] = generateS(i + 1, e);
+                if (Syndrome[i] != S[i]) {
                     break;
                 }
             }
-            if (flag)
-                P++;
+        } else {
+            for (int s : S) {
+                if (s != 0) {
+                    return null;
+                }
+            }
         }
+        return e;
     }
+
 
     private boolean isLinearlyIndependent() {
         for (int i = 0; i < system.length; i++) {
@@ -49,12 +54,9 @@ public class LinearSystem {
         return true;
     }
 
-    public static int getP() {
-        return P;
-    }
+
 
     private int[] findSolution() {
-        //ToDo сделать проверку для первого элемента на равность 0
         for (int i = 0; i < system.length; i++) {
             for (int j = system[0].length - 1; j >= 0; j--) {
                 //Поделить строку на первый ненулевой элемент
@@ -88,24 +90,22 @@ public class LinearSystem {
     }
 
     public int generateS(int i, boolean[] e) {
-        int S = -1;
+        int s = 0;
         if (i % 2 == 0)
-            S = field.powGFByIndex(generateS(i / 2, e), 2);
+            s = field.powGF(Syndrome[i / 2 - 1], 2);
         else
             for (int j = 0; j < e.length; j++) {
                 if (e[j]) {
-                    S = field.addByIndex(S, field.powGFByIndex(i, j));
+                    s = s ^ field.powGFByIndex(i, j);
                 }
             }
-        return S;
+        return s;
     }
 
-    public void generateSystem(int mistakes, boolean[] e) {
+    public void generateSystem(int mistakes, int[] S) {
         system = new int[mistakes][mistakes + 1];
         for (int i = 0; i < mistakes; i++) {
-            for (int j = mistakes; j >= 0; j--) {
-                system[i][j] = field.arr[generateS(j + i + 1, e) + 1];
-            }
+            System.arraycopy(S, i, system[i], 0, mistakes + 1);
         }
     }
 
@@ -121,15 +121,24 @@ public class LinearSystem {
     private ArrayList<Integer> findRoots() {
         ArrayList roots = new ArrayList(ai.length);
         for (int root = 0; root < pow(2, field.getM()) - 1; root++) {
-            int res = field.arr[field.powGFByIndex(root, ai.length) + 1];
+           int res = hornerMethod(field.arr[root+1]);
+            /*int res = field.powGFByIndex(root, ai.length);
             for (int i = 0; i < ai.length; i++) {
-                res = res ^ field.multiply(ai[i], field.arr[field.powGFByIndex(root, i) + 1]);
-            }
+                res = res ^ field.multiply(ai[i], field.powGFByIndex(root, i));
+            }*/
             if (res == 0)
                 roots.add(root);
         }
         return roots;
     }
 
+    public int hornerMethod(int x) {
+        int res = 1;
+        for (int i = ai.length - 1; i >= 0; i--) {
+            res = field.multiply(res, x);
+            res = res ^ ai[i];
+        }
+        return (res);
+    }
 }
 
