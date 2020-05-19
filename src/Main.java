@@ -6,8 +6,8 @@ public class Main {
         System.out.println(Signature.i);
     }
 
-    static int booleansToInt(boolean[] arr) {
-        int n = 0;
+    static long booleansToInt(boolean[] arr) {
+        long n = 0;
         for (boolean b : arr)
             n = (n << 1) | (b ? 1 : 0);
         return n;
