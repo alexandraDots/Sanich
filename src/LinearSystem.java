@@ -3,12 +3,17 @@ import java.util.ArrayList;
 import static java.lang.Math.pow;
 
 public class LinearSystem {
-    private static int m = 5;
-    private static GF field = new GF((byte) m);
+    private  int m;
+    private  GF field;
     private int[][] system;
     //решение системы
     private int[] ai;
     private int[] Syndrome;
+
+    public LinearSystem(byte n){
+        this.m = n;
+        field =  new GF((byte) m);
+    }
 
     public  boolean[] sign (int[] S, int t) {
 
@@ -31,7 +36,7 @@ public class LinearSystem {
                 //S[0] = S1
                     Syndrome[i] = generateS(i + 1, e);
                 if (Syndrome[i] != S[i]) {
-                    break;
+                    return null;
                 }
             }
         } else {
