@@ -17,12 +17,6 @@ public class LinearSystem {
     }
 
     public boolean check(boolean[] e, int[] S, int t) {
-        do {
-            generateSystem(t, S);
-            ai = findSolution();
-            if (!isLinearlyIndependent())
-                t--;
-        } while (!isLinearlyIndependent() && t != 0);
         Syndrome = new int[2 * t];
         //S[0] = S1
         for (int i = 0; i < Syndrome.length; i++) {
@@ -37,9 +31,12 @@ public class LinearSystem {
 
         do {
             generateSystem(t, S);
-            ai = findSolution();
-            if (!isLinearlyIndependent())
+            try {
+                ai = findSolution();
+            } catch (ExceptionLinearlyDependent e) {
+                //System.out.println(e.getMessage());
                 t--;
+            }
         } while (!isLinearlyIndependent() && t != 0);
 
         //проверка
@@ -78,13 +75,22 @@ public class LinearSystem {
     }
 
 
-    private int[] findSolution() {
+    private int[] findSolution() throws ExceptionLinearlyDependent {
         int a;
+        int[] tmpRow;
         for (int i = 0; i < system.length; i++) {
             for (int j = system[0].length - 1; j >= 0; j--) {
-                //Поделить строку на первый ненулевой элемент
-                if (system[i][i] == 0)
-                    continue;
+                // Если і-ый элемент  равен 0 - поменять эту строку с той  где і-ый элемент !=0
+                for (int k = i; system[k][i] == 0; k++) {
+                    if (k + 1 >= system.length)
+                        throw new ExceptionLinearlyDependent("System isn't LinearlyIndependent");
+                    if (system[k + 1][i] != 0) {
+                        tmpRow = system[i];
+                        system[k + 1] = system[i];
+                        system[i] = tmpRow;
+                    }
+                }
+                //Поделить строку на первый ненулевой элемент,
                 system[i][j] = field.divide(system[i][j], system[i][i]);
             }
             if (i == system.length - 1)
@@ -164,5 +170,13 @@ public class LinearSystem {
         }
         return (res);
     }
+
+    class ExceptionLinearlyDependent extends Exception {
+        public ExceptionLinearlyDependent(String s) {
+            super(s);
+        }
+    }
+
+    ;
 }
 
