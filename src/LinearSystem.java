@@ -1,21 +1,39 @@
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
 import static java.lang.Math.pow;
 
 public class LinearSystem {
-    private  int m;
-    private  GF field;
+    private int m;
+    private GF field;
     private int[][] system;
     //решение системы
     private int[] ai;
     private int[] Syndrome;
 
-    public LinearSystem(byte n){
+    public LinearSystem(byte n) {
         this.m = n;
-        field =  new GF((byte) m);
+        field = new GF((byte) m);
     }
 
-    public  boolean[] sign (int[] S, int t) {
+    public boolean check(boolean[] e, int[] S, int t) {
+        do {
+            generateSystem(t, S);
+            ai = findSolution();
+            if (!isLinearlyIndependent())
+                t--;
+        } while (!isLinearlyIndependent() && t != 0);
+        Syndrome = new int[2 * t];
+        //S[0] = S1
+        for (int i = 0; i < Syndrome.length; i++) {
+            Syndrome[i] = generateS(i + 1, e);
+            if (Syndrome[i] != S[i])
+                return false;
+        }
+        return true;
+    }
+
+    public boolean[] sign(int[] S, int t) {
 
         do {
             generateSystem(t, S);
@@ -25,7 +43,7 @@ public class LinearSystem {
         } while (!isLinearlyIndependent() && t != 0);
 
         //проверка
-           boolean[] e = new boolean[(int) Math.pow(2,m)];
+        boolean[] e = new boolean[(int) Math.pow(2, m)];
         //если t == 0 проверить S = 0
         if (t != 0) {
             for (Integer i : findRoots()) {
@@ -34,7 +52,7 @@ public class LinearSystem {
             Syndrome = new int[2 * t];
             for (int i = 0; i < 2 * t; i++) {
                 //S[0] = S1
-                    Syndrome[i] = generateS(i + 1, e);
+                Syndrome[i] = generateS(i + 1, e);
                 if (Syndrome[i] != S[i]) {
                     return null;
                 }
@@ -60,16 +78,17 @@ public class LinearSystem {
     }
 
 
-
     private int[] findSolution() {
+        int a;
         for (int i = 0; i < system.length; i++) {
             for (int j = system[0].length - 1; j >= 0; j--) {
                 //Поделить строку на первый ненулевой элемент
+                if (system[i][i] == 0)
+                    continue;
                 system[i][j] = field.divide(system[i][j], system[i][i]);
             }
             if (i == system.length - 1)
                 break;
-            int a;
             for (int row = i + 1; row < system.length; row++) {
                 a = system[row][i];
                 for (int col = 0; col < system[0].length; col++)
@@ -87,11 +106,11 @@ public class LinearSystem {
                 system[j][i] = system[j][i] ^ field.multiply(system[j][i], system[i][i]);
             }
         }
-        int[] a = new int[system.length];
+        int[] arr = new int[system.length];
         for (int i = 0; i < system.length; i++) {
-            a[i] = system[i][k];
+            arr[i] = system[i][k];
         }
-        return a;
+        return arr;
     }
 
     public int generateS(int i, boolean[] e) {
@@ -126,7 +145,7 @@ public class LinearSystem {
     private ArrayList<Integer> findRoots() {
         ArrayList roots = new ArrayList(ai.length);
         for (int root = 0; root < pow(2, field.getM()) - 1; root++) {
-           int res = hornerMethod(field.arr[root+1]);
+            int res = hornerMethod(field.arr[root + 1]);
             /*int res = field.powGFByIndex(root, ai.length);
             for (int i = 0; i < ai.length; i++) {
                 res = res ^ field.multiply(ai[i], field.powGFByIndex(root, i));

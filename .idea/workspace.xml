@@ -1,7 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="bf0e1baf-8350-4b2c-91d0-d710446d3a7c" name="Default Changelist" comment="" />
+    <list default="true" id="bf0e1baf-8350-4b2c-91d0-d710446d3a7c" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Gauss/GF.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Gauss/GF.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Gauss/LinearSystem.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Gauss/LinearSystem.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Gauss/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Gauss/Main.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/GF.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GF.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/LinearSystem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/LinearSystem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Signature.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Signature.java" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -16,14 +26,14 @@
     </option>
   </component>
   <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/Sanich" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ProjectId" id="1YGTaOoXHsyHHNrl6kT43tfXehT" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../Laba2" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.0" />
@@ -73,6 +83,8 @@
       <workItem from="1583073020543" duration="4885000" />
       <workItem from="1583156747331" duration="937000" />
       <workItem from="1583159328590" duration="143000" />
+      <workItem from="1590116306811" duration="66000" />
+      <workItem from="1590116823302" duration="27000" />
     </task>
     <servers />
   </component>

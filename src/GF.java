@@ -34,38 +34,90 @@ public class GF {
     }
 
     public int add(int a, int b) {
-        return a ^ b;
+        boolean pp = countParity(a) == countParity(b);
+        if (countParity(a ^ b) == pp)
+            return a ^ b;
+        else
+            try {
+                throw new Exception("The error has occurred. Predicted parity of sum doesn't match the real one");
+            } catch (Exception e) {
+                e.printStackTrace();
+                return -1;
+            }
+
     }
 
+
     // 0 = нулевая степень
-    public int multiplyByIndex(int a, int b) {
+    public int multiplyByIndex(int index1, int index2) {
         int sum;
-        if (a == -1 || b == -1) return 0;
-        sum = a + b;
-        if (sum >= (int)(pow(2,m)) - 1)
-            sum %= (int)(pow(2,m)) - 1;
-        return sum ;
+        if (index1 == -1 || index2 == -1) return 0;
+        sum = index1 + index2 - 1;
+        if (sum >= (int) (pow(2, m)) - 1)
+            sum %= (int) (pow(2, m)) - 1;
+        return sum;
     }
 
     public int multiply(int a, int b) {
+        boolean pA, pX = countParity(a);
+        boolean pp = true;
+        int B = b;
         int result = 0;
         int x = a;
-        if (b % 2 != 0)
-            result = a;
-        b = b / 2;
         while (b > 0) {
-            x = multiplyByX(x);
+            pp = pp == (countParity(b%2) | pX);
             if (b % 2 == 1)
-                result = result ^ x;
-            b = b / 2;
+                result = add(result, x);
+            b = b >> 1;
+            pX = pX  ==  countParity(x >> (m - 1));
+            x = multiplyByX(x);
+            if (pX != countParity(x))
+                try {
+                    throw new Exception ("Predicted parity of X doesn't match the actual parity of X");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
         }
+        //System.out.println(pp==countParity(result));
         return result;
     }
 
-    private int multiplyByX(int a) {
+    private int multiplyByAlpha(int a) {
+        boolean pp = countParity(a) == countParity(a >> (m - 1));
+        int result;
         if (a >> (m - 1) != 0)
-            return a << 1 ^ g;
-        return a << 1;
+            result = a << 1 ^ g;
+        else
+            result = a << 1;
+        if (pp == countParity(result))
+            return result;
+        else
+            try {
+                throw new Exception("The error has occurred. Predicted parity of alpha module doesn't match the real one");
+            } catch (Exception e) {
+                e.printStackTrace();
+                //System.out.println(e.getMessage());
+                return result;
+            }
+    }
+
+    private int multiplyByX(int a) {
+        boolean pp = countParity(a) == countParity(a >> (m - 1));
+        int result;
+        if (a >> (m - 1) != 0)
+            result = a << 1 ^ g;
+        else
+            result = a << 1;
+        if (pp == countParity(result))
+            return result;
+        else
+            try {
+                throw new Exception("The error has occurred. Predicted parity of alpha module doesn't match the real one");
+            } catch (Exception e) {
+                e.printStackTrace();
+                //System.out.println(e.getMessage());
+                return result;
+            }
     }
 
 
@@ -91,8 +143,9 @@ public class GF {
             return multiply(powGF(square, n / 2), a); // a * (a*a)^[n/2]
         }
     }
+
     // 0 = нулевая степень
-    public int powGFByIndex(int a , int b) {
+    public int powGFByIndex(int a, int b) {
         int res;
         if (a == 0 || b == 0) return 1;
         res = a * b;
@@ -109,7 +162,7 @@ public class GF {
         if (b == 0) return -1;
         diff = a - b;
         while (diff < 0)
-            diff += (int)(pow(2,m)) - 1;
+            diff += (int) (pow(2, m)) - 1;
         return diff;
     }
 
@@ -183,7 +236,7 @@ public class GF {
         for (int i = 0; i < H.length; i++) {
             a = H[i];
             for (int j = 0; j < pow(2, m) - 1; j++) {
-                System.out.print((int) ((a * j) % (pow(2, m) - 1) ) + " ");
+                System.out.print((int) ((a * j) % (pow(2, m) - 1)) + " ");
             }
             System.out.println();
         }
@@ -197,15 +250,15 @@ public class GF {
             j = H[i];
             do {
                 elements.add(j);
-                j = (int) (j * 2 % (pow(2,m) - 1));
+                j = (int) (j * 2 % (pow(2, m) - 1));
             } while (j != H[i]);
         }
         elements.sort(null);
         System.out.println(elements);
         int maxSeqCnt = 0;
-        for (int i = 1, currentSeqCnt = 1; i < elements.size()  ; i++) {
-            if ((elements.get(i) != elements.get(i - 1) + 1) ) {
-                maxSeqCnt = max(currentSeqCnt,maxSeqCnt);
+        for (int i = 1, currentSeqCnt = 1; i < elements.size(); i++) {
+            if ((elements.get(i) != elements.get(i - 1) + 1)) {
+                maxSeqCnt = max(currentSeqCnt, maxSeqCnt);
                 currentSeqCnt = 0;
                 continue;
             }
@@ -214,8 +267,36 @@ public class GF {
         return maxSeqCnt;
     }
 
+    // true - even, false - odd
+    public boolean countParity(int n) {
+        int p = 0;
+        while (n > 0) {
+            p = p ^ (n % 2);
+            n = n >> 1;
+        }
+        return p == 0;
+    }
+
+    public int countEvenParity(int n) {
+        int p = 0;
+        while (n > 0) {
+            p = p + (n % 2);
+            n = n >> 1;
+        }
+        return p;
+    }
+
+    public int countOddParity(int n) {
+        int p = 0;
+        while (n > 0) {
+            p = p + (n % 2 == 0 ? 1 : 0);
+            n = n >> 1;
+        }
+        return p;
+    }
+
     public int addByIndex(int a, int b) {
-        return index_of[arr[a+1]^arr[b+1]] - 1;
+        return index_of[add(arr[a + 1], arr[b + 1])] - 1;
     }
 
     public int getM() {
