@@ -116,7 +116,7 @@ public class LinearSystem {
     public int generateS(int i, boolean[] e) {
         int s = 0;
         if (i % 2 == 0)
-            s = field.powGF(Syndrome[i / 2 - 1], 2);
+            s = field.powGFByIndex(Syndrome[i / 2 - 1], 2);
         else
             for (int j = 0; j < e.length; j++) {
                 if (e[j]) {
