@@ -3,8 +3,14 @@
   <component name="ChangeListManager">
     <list default="true" id="bf0e1baf-8350-4b2c-91d0-d710446d3a7c" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Gauss/GF.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Gauss/GF.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Gauss/LinearSystem.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Gauss/LinearSystem.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Gauss/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Gauss/Main.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Gauss/Signature.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Gauss/Signature.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/GF.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GF.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/LinearSystem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/LinearSystem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Signature.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Signature.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -82,6 +88,8 @@
       <workItem from="1583159328590" duration="143000" />
       <workItem from="1590116306811" duration="66000" />
       <workItem from="1590116823302" duration="27000" />
+      <workItem from="1590169430554" duration="2625000" />
+      <workItem from="1590172080701" duration="5091000" />
     </task>
     <servers />
   </component>
@@ -102,6 +110,20 @@
     </option>
   </component>
   <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/LinearSystem.java</url>
+          <line>22</line>
+          <option name="timeStamp" value="3" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/LinearSystem.java</url>
+          <line>141</line>
+          <option name="timeStamp" value="4" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
     <watches-manager>
       <configuration name="Application">
         <watch expression=" S" />

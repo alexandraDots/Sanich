@@ -4,6 +4,7 @@ public class Main {
     public static void main(String[] args) {
         String M = "Hello, I am Sasha";
         boolean [] signature = Signature.signature(M);
+        GF field = new GF((byte) 5);
         System.out.println(booleansToInt(signature));
         System.out.println(Signature.i);
         System.out.println(Signature.checkSignature(signature,Signature.i,M));

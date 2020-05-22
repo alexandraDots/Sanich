@@ -33,9 +33,11 @@ public class LinearSystem {
             generateSystem(t, S);
             try {
                 ai = findSolution();
-            } catch (ExceptionLinearlyDependent e) {
+            } catch (LinearlyDependentException e) {
                 //System.out.println(e.getMessage());
                 t--;
+            } catch (TooManySolutionsException e) {
+                return null;
             }
         } while (!isLinearlyIndependent() && t != 0);
 
@@ -75,19 +77,24 @@ public class LinearSystem {
     }
 
 
-    private int[] findSolution() throws ExceptionLinearlyDependent {
+    private int[] findSolution() throws LinearlyDependentException, TooManySolutionsException {
         int a;
         int[] tmpRow;
+        boolean LinearlyDependent = false;
         for (int i = 0; i < system.length; i++) {
             for (int j = system[0].length - 1; j >= 0; j--) {
                 // Если і-ый элемент  равен 0 - поменять эту строку с той  где і-ый элемент !=0
                 for (int k = i; system[k][i] == 0; k++) {
-                    if (k + 1 >= system.length)
-                        throw new ExceptionLinearlyDependent("System isn't LinearlyIndependent");
+                    if (k + 1 >= system.length) {
+                        checkSystemOK();
+                        LinearlyDependent = true;
+                        break;
+                    }
                     if (system[k + 1][i] != 0) {
                         tmpRow = system[i];
                         system[k + 1] = system[i];
                         system[i] = tmpRow;
+                        break;
                     }
                 }
                 //Поделить строку на первый ненулевой элемент,
@@ -112,6 +119,9 @@ public class LinearSystem {
                 system[j][i] = system[j][i] ^ field.multiply(system[j][i], system[i][i]);
             }
         }
+        checkSystemOK();
+        if (LinearlyDependent)
+            throw new LinearlyDependentException("System isn't LinearlyIndependent");
         int[] arr = new int[system.length];
         for (int i = 0; i < system.length; i++) {
             arr[i] = system[i][k];
@@ -119,14 +129,29 @@ public class LinearSystem {
         return arr;
     }
 
+    private void checkSystemOK() throws TooManySolutionsException {
+        boolean flag;
+        for (int i = 0; i < system.length; i++) {
+            flag = true;
+            for (int j = 0; j < system[0].length - 1; j++) {
+                if (system[i][j] != 0) {
+                    flag = false;
+                    break;
+                }
+            }
+            if (flag)
+                throw new TooManySolutionsException();
+        }
+    }
+
     public int generateS(int i, boolean[] e) {
         int s = 0;
         if (i % 2 == 0)
-            s = field.powGFByIndex(Syndrome[i / 2 - 1], 2);
+            s = field.powGF(Syndrome[i / 2 - 1], 2);
         else
             for (int j = 0; j < e.length; j++) {
                 if (e[j]) {
-                    s = s ^ field.powGFByIndex(i, j);
+                    s = s ^ field.powGFByIndex(j + 1, i);
                 }
             }
         return s;
@@ -171,12 +196,15 @@ public class LinearSystem {
         return (res);
     }
 
-    class ExceptionLinearlyDependent extends Exception {
-        public ExceptionLinearlyDependent(String s) {
+    static class LinearlyDependentException extends Exception {
+        LinearlyDependentException(String s) {
             super(s);
         }
     }
 
-    ;
+    private class TooManySolutionsException extends Exception {
+    }
+
+
 }
 

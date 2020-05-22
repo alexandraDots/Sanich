@@ -3,7 +3,7 @@ import static java.lang.Math.pow;
 public final class Signature {
     static int i = 1;
     static byte m = 5;
-    static int t = m / 2;
+    static int t = 2;
     static LinearSystem system = new LinearSystem(m);
 
 

@@ -146,9 +146,10 @@ public class GF {
 
     // 0 = нулевая степень
     public int powGFByIndex(int indexOfA, int degree) {
+        indexOfA--;
         int res;
-        if (indexOfA == 0 || degree == 0) return 1;
-        res = indexOfA * degree;
+        if (indexOfA   == 0 || degree == 0) return 1;
+        res = (indexOfA) * degree;
         if (res >= arr.length - 1)
             res = res % (arr.length - 1);
         while (res < 0)
