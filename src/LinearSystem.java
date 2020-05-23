@@ -1,20 +1,92 @@
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
+import static java.lang.Math.floor;
 import static java.lang.Math.pow;
 
 public class LinearSystem {
     private int m;
-    private GF field;
+    private  GF field;
     private int[][] system;
     //решение системы
     private int[] ai;
     private int[] Syndrome;
-
     public LinearSystem(byte n) {
         this.m = n;
         field = new GF((byte) m);
     }
+    public boolean decode(int t, boolean[] c) {
+        Syndrome = new int[2 * t];
+        boolean tmpFlag = true;
+        for (int i = 0; i < Syndrome.length; i++) {
+            Syndrome[i] = generateS(i + 1, c);
+            if (Syndrome[i]!= 0)
+                tmpFlag = false;
+        }
+        if (tmpFlag) return true;
+        do {
+            generateSystem(t, c);
+            try {
+                ai = findSolution();
+            } catch (LinearlyDependentException e) {
+                //System.out.println(e.getMessage());
+                t--;
+            } catch (TooManySolutionsException e) {
+                return false;
+            }
+        } while (!isLinearlyIndependent() && t != 0);
+
+        //просто выйти если t == 0
+        if (t != 0) {
+            boolean[] e = new boolean[c.length];
+            for (Integer i : findRoots()) {
+                e[i] = true;
+            }
+            for (int i = 1; i < 2 * t; i++) {
+                if (generateS(i, e) != generateS(i, c)) {
+                    return false;
+                }
+            }
+            return true;
+        }
+        return false;
+    }
+
+    public boolean decode(int t, int[] S) {
+        boolean tmpFlag = true;
+        for (int i = 0; i < 2*t; i++) {
+            if (S[i]!= 0)
+                tmpFlag = false;
+        }
+        if (tmpFlag) return true;
+        do {
+            generateSystem(t, S);
+            try {
+                ai = findSolution();
+            } catch (LinearlyDependentException e) {
+                //System.out.println(e.getMessage());
+                t--;
+            } catch (TooManySolutionsException e) {
+                return false;
+            }
+        } while (!isLinearlyIndependent() && t != 0);
+
+        //просто выйти если t == 0
+        if (t != 0) {
+            boolean[] e =  new boolean[(int) Math.pow(2, m)];
+            for (Integer i : findRoots()) {
+                e[i] = true;
+            }
+            for (int i = 1; i < 2 * t; i++) {
+                if (generateS(i, e) != S[i-1]) {
+                    return false;
+                }
+            }
+            return true;
+        }
+        return false;
+    }
+
 
     public boolean check(boolean[] e, int[] S, int t) {
         Syndrome = new int[2 * t];
@@ -139,7 +211,7 @@ public class LinearSystem {
                     break;
                 }
             }
-            if (flag)
+            if (flag && system[i][system.length]!=0)
                 throw new TooManySolutionsException();
         }
     }
@@ -161,6 +233,13 @@ public class LinearSystem {
         system = new int[mistakes][mistakes + 1];
         for (int i = 0; i < mistakes; i++) {
             System.arraycopy(S, i, system[i], 0, mistakes + 1);
+        }
+    }
+
+    public void generateSystem(int mistakes, boolean[] e) {
+        system = new int[mistakes][mistakes + 1];
+        for (int i = 0; i < mistakes; i++) {
+            System.arraycopy(Syndrome, i, system[i], 0, mistakes + 1);
         }
     }
 
