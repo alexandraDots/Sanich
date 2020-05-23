@@ -10,12 +10,12 @@ public class GF {
     private final int[] gSet = {3, 7, 11, 19, 37, 67, 137, 285, 529, 1033, 2053, 4179, 8219, 17475, 32771, 69643,
             131081, 262273, 524327, 1048585, 2097157, 4194307, 8388641, 16777351, 33554441};
     private ArrayList<Integer> conjugateEl;
-    private int[] H;
+    ArrayList<ArrayList<Integer>> H;
 
     public GF(byte degree) {
         m = degree;
         g = generatePolynomial(m);
-        generateConj();
+        createParityCheckMatrix();
         arr = new int[(int) pow(2, m)];
         index_of = new int[(int) pow(2, m)];
         arr[0] = 0;
@@ -206,14 +206,37 @@ public class GF {
         }
     }
 
-    public void createParityCheckMatrix(int numberOfClasses) {
-        H = new int[numberOfClasses];
-        for (int i = 0; i < numberOfClasses; i++) {
-            H[i] = conjugateEl.get(i);
+    public void createParityCheckMatrix() {
+        // минимум классов - (2^m-2)/m
+        H = new ArrayList<ArrayList<Integer>> ((int) ((pow(2, m) - 2)) / m);
+        ArrayList<Integer> allElements = new ArrayList<Integer>();
+        int a = 1;
+        int j;
+        int i = 0;
+        while (allElements.size() != pow(2, m) - 2) {
+            // минимум елементов в одном классе - наименьший делитель m
+            ArrayList<Integer> elements = new ArrayList<Integer>(leastDivisor(m));
+            j = a;
+            do {
+                elements.add(j);
+                j = (int) (j * 2 % (pow(2, m) - 1));
+            } while (j != a);
+            //можно убрать сортировку (она для наглядности)
+            elements.sort(null);
+            H.add(i,elements);
+            allElements.addAll(elements);
+            allElements.sort(null);
+            for (int k = 1; k < allElements.size(); k++) {
+                if (allElements.get(k) != allElements.get(k - 1) + 1) {
+                    a = allElements.get(k - 1) + 1;
+                    break;
+                }
+            }
         }
+
     }
 
-    private int leastDivisor(int a) {
+     int leastDivisor(int a) {
         for (int i = 2; i <= sqrt(a); i++) {
             if (a % i == 0)
                 return i;
@@ -233,40 +256,17 @@ public class GF {
     }
 
     public void printH() {
-        int a;
-        for (int i = 0; i < H.length; i++) {
-            a = H[i];
-            for (int j = 0; j < pow(2, m) - 1; j++) {
-                System.out.print((int) ((a * j) % (pow(2, m) - 1)) + " ");
+        ArrayList<Integer> a;
+        for (int i = 0; i < H.size(); i++) {
+            a = H.get(i);
+            for (int j = 0; j < a.size(); j++) {
+                System.out.print(a.get(j) + " ");
             }
             System.out.println();
         }
     }
 
-    public int count2T() {
-        ArrayList<Integer> elements =
-                new ArrayList<Integer>(leastDivisor(m) * H.length);
-        int a, j;
-        for (int i = 0; i < H.length; i++) {
-            j = H[i];
-            do {
-                elements.add(j);
-                j = (int) (j * 2 % (pow(2, m) - 1));
-            } while (j != H[i]);
-        }
-        elements.sort(null);
-        System.out.println(elements);
-        int maxSeqCnt = 0;
-        for (int i = 1, currentSeqCnt = 1; i < elements.size(); i++) {
-            if ((elements.get(i) != elements.get(i - 1) + 1)) {
-                maxSeqCnt = max(currentSeqCnt, maxSeqCnt);
-                currentSeqCnt = 0;
-                continue;
-            }
-            currentSeqCnt++;
-        }
-        return maxSeqCnt;
-    }
+
 
     // true - even, false - odd
     public boolean countParity(int n) {
@@ -302,5 +302,9 @@ public class GF {
 
     public int getM() {
         return m;
+    }
+
+    public int getHSize() {
+        return H.size();
     }
 }

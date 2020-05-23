@@ -6,7 +6,7 @@ import static java.lang.Math.pow;
 
 public class LinearSystem {
     private int m;
-    private  GF field;
+    GF field;
     private int[][] system;
     //решение системы
     private int[] ai;
@@ -31,8 +31,6 @@ public class LinearSystem {
             } catch (LinearlyDependentException e) {
                 //System.out.println(e.getMessage());
                 t--;
-            } catch (TooManySolutionsException e) {
-                return false;
             }
         } while (!isLinearlyIndependent() && t != 0);
 
@@ -52,9 +50,46 @@ public class LinearSystem {
         return false;
     }
 
+//    public boolean decode(int t, int[] S) {
+//        boolean tmpFlag = true;
+//        for (int i = 0; i < 2*t; i++) {
+//            if (S[i]!= 0) {
+//                tmpFlag = false;
+//                break;
+//            }
+//        }
+//        if (tmpFlag) return true;
+//        do {
+//            generateSystem(t, S);
+//            try {
+//                ai = findSolution();
+//            } catch (LinearlyDependentException e) {
+//                //System.out.println(e.getMessage());
+//                t--;
+//            }
+//        } while (!isLinearlyIndependent() && t != 0);
+//
+//        //просто выйти если t == 0
+//        if (t != 0) {
+//            boolean[] e =  new boolean[(int) Math.pow(2, m)];
+//            for (Integer i : findRoots()) {
+//                e[i] = true;
+//            }
+//            Syndrome = new int[2*t];
+//            for (int i = 0; i < 2 * t - 1; i++) {
+//                Syndrome [i] =  generateS(i + 1, e);
+//                if (Syndrome [i] != S[i]) {
+//                    return false;
+//                }
+//            }
+//            return true;
+//        }
+//        return false;
+//    }
+
     public boolean decode(int t, int[] S) {
         boolean tmpFlag = true;
-        for (int i = 0; i < 2*t; i++) {
+        for (int i = 0; i < S.length; i++) {
             if (S[i]!= 0)
                 tmpFlag = false;
         }
@@ -66,21 +101,20 @@ public class LinearSystem {
             } catch (LinearlyDependentException e) {
                 //System.out.println(e.getMessage());
                 t--;
-            } catch (TooManySolutionsException e) {
-                return false;
             }
         } while (!isLinearlyIndependent() && t != 0);
 
         //просто выйти если t == 0
         if (t != 0) {
-            boolean[] e =  new boolean[(int) Math.pow(2, m)];
+            boolean[] e = new boolean[(int) Math.pow(2, m)];
             for (Integer i : findRoots()) {
                 e[i] = true;
             }
-            for (int i = 1; i < 2 * t; i++) {
-                if (generateS(i, e) != S[i-1]) {
+            Syndrome = new int[2 * t];
+            for (int i = 0; i < 2 * t - 1 ; i++) {
+                Syndrome[i] = generateS(i + 1, e);
+                if (Syndrome[i] != S[i])
                     return false;
-                }
             }
             return true;
         }
@@ -108,8 +142,6 @@ public class LinearSystem {
             } catch (LinearlyDependentException e) {
                 //System.out.println(e.getMessage());
                 t--;
-            } catch (TooManySolutionsException e) {
-                return null;
             }
         } while (!isLinearlyIndependent() && t != 0);
 
@@ -149,7 +181,7 @@ public class LinearSystem {
     }
 
 
-    private int[] findSolution() throws LinearlyDependentException, TooManySolutionsException {
+    private int[] findSolution() throws LinearlyDependentException {
         int a;
         int[] tmpRow;
         boolean LinearlyDependent = false;
@@ -158,7 +190,7 @@ public class LinearSystem {
                 // Если і-ый элемент  равен 0 - поменять эту строку с той  где і-ый элемент !=0
                 for (int k = i; system[k][i] == 0; k++) {
                     if (k + 1 >= system.length) {
-                        checkSystemOK();
+                        //checkSystemOK();
                         LinearlyDependent = true;
                         break;
                     }
@@ -191,7 +223,7 @@ public class LinearSystem {
                 system[j][i] = system[j][i] ^ field.multiply(system[j][i], system[i][i]);
             }
         }
-        checkSystemOK();
+        //checkSystemOK();
         if (LinearlyDependent)
             throw new LinearlyDependentException("System isn't LinearlyIndependent");
         int[] arr = new int[system.length];
@@ -273,6 +305,10 @@ public class LinearSystem {
             res = res ^ ai[i];
         }
         return (res);
+    }
+
+    public int getM() {
+        return m;
     }
 
     static class LinearlyDependentException extends Exception {

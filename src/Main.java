@@ -1,24 +1,49 @@
+import java.util.ArrayList;
+import java.util.Collections;
+
 import static java.lang.Math.pow;
 
 public class Main {
+    private LinearSystem system;
+
     public static void main(String[] args) {
-        byte m = 5;
+        byte m;
         int P = 0;
-        LinearSystem system = new LinearSystem(m);
-        for (int t = 1; t < (pow(2, m) - 1) / m; t++){
-            boolean[] c = new boolean[(int) (pow(2, m) - 1)];
+        int s;
+        int row;
+        int col;
+        for (m = 5; m <= 15; m++) {
             System.out.println();
-            for (int i = 0; i < 1000; i++) {
-                for (int j = 0; j < pow(2, m) - 1; j++) {
-                    c[j] = (int) (Math.random() * 2) == 0;
+            System.out.println("m = " + m);
+            LinearSystem system = new LinearSystem(m);
+            for (int t = 1; t < (pow(2, m) - 1) / m; t++) {
+                int[] S = new int[2 * t];
+                for (int count = 0; count < 10000; count++) {
+                    boolean[] H = new boolean[system.field.H.size()];
+                    // Sj
+                    for (int j = 1; j <= S.length; j++) {
+                        //S[0]=S1
+                        if ((j) % 2 == 0)
+                            S[j - 1] = system.field.powGF(S[j / 2 - 1], 2);
+                        else {
+                            do
+                                row = (int) (Math.random() * (system.field.H.size()));
+                            while (H[row]);
+                            col = (int) (Math.random() * (system.field.H.get(row).size()));
+                            S[j - 1] = system.field.H.get(row).get(col);
+                        }
+                    }
+                    if (system.decode(t, S))
+                        P++;
                 }
-                if (system.decode(t,c))
-                    P++;
+                System.out.println(P);
+                P = 0;
             }
-            System.out.print(t + " " + P*1.0/1000);
-           P = 0;
         }
+        System.out.println();
     }
+
+
 
     static long booleansToInt(boolean[] arr) {
         long n = 0;
