@@ -87,7 +87,7 @@ public class LinearSystem {
                 // Если і-ый элемент  равен 0 - поменять эту строку с той  где і-ый элемент !=0
                 for (int k = i; system[k][i] == 0; k++) {
                     if (k + 1 >= system.length) {
-                        checkSystemOK();
+                        //checkSystemOK();
                         LinearlyDependent = true;
                         break;
                     }

@@ -2,12 +2,12 @@ import static java.lang.Math.pow;
 
 public class Main {
     public static void main(String[] args) {
-        String M = "Hello, I am Sasha";
-        GF field = new GF ((byte) 5);
-        field.printH();
-        boolean b [] =  Signature.signature(M);
+        String M = "Heeeeeeeeello, I am Sasha";
+        //GF field = new GF ((byte) 5);
+        Signature s = new Signature();
+        boolean b [] =  s.signature(M);
         System.out.println(booleansToInt(b));
-        System.out.println(Signature.i);
+        System.out.println(s.i);
         System.out.println(Signature.checkSignature(b, Signature.i, M));
 
     }

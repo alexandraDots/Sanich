@@ -208,9 +208,8 @@ public class GF {
                 elements.add(j);
                 j = (int) (j * 2 % (pow(2, m) - 1));
             } while (j != a);
-            //можно убрать сортировку (она для наглядности)
             elements.sort(null);
-            H.add(i,elements);
+            H.add(elements);
             allElements.addAll(elements);
             allElements.sort(null);
             for (int k = 1; k < allElements.size(); k++) {
