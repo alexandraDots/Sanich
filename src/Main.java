@@ -2,8 +2,14 @@ import static java.lang.Math.pow;
 
 public class Main {
     public static void main(String[] args) {
-        System.out.println(booleansToInt(Signature.signature("Hello, I am Sasha")));
+        String M = "Hello, I am Sasha";
+        GF field = new GF ((byte) 5);
+        field.printH();
+        boolean b [] =  Signature.signature(M);
+        System.out.println(booleansToInt(b));
         System.out.println(Signature.i);
+        System.out.println(Signature.checkSignature(b, Signature.i, M));
+
     }
 
     static long booleansToInt(boolean[] arr) {

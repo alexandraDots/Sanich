@@ -1,8 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="BranchesTreeState">
+    <expand>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </expand>
+    <select />
+  </component>
   <component name="ChangeListManager">
-    <list default="true" id="bf0e1baf-8350-4b2c-91d0-d710446d3a7c" name="Default Changelist" comment="" />
-    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <list default="true" id="bf0e1baf-8350-4b2c-91d0-d710446d3a7c" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Gauss/GF.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Gauss/LinearSystem.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Gauss/Main.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/GF.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GF.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/LinearSystem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/LinearSystem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Signature.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Signature.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Новый текстовый документ.txt" beforeDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -16,10 +44,14 @@
     </option>
   </component>
   <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/Sanich" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ProjectId" id="1YGTaOoXHsyHHNrl6kT43tfXehT" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
@@ -27,22 +59,12 @@
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.0" />
-    <property name="settings.editor.selected.configurable" value="settings.github" />
-  </component>
-  <component name="RunDashboard">
-    <option name="ruleStates">
-      <list>
-        <RuleState>
-          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
-        </RuleState>
-        <RuleState>
-          <option name="name" value="StatusDashboardGroupingRule" />
-        </RuleState>
-      </list>
-    </option>
+    <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Mappings" />
   </component>
   <component name="RunManager">
     <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="ALTERNATIVE_JRE_PATH" value="11" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
       <option name="MAIN_CLASS_NAME" value="Main" />
       <module name="Gauss" />
       <method v="2">
@@ -73,24 +95,89 @@
       <workItem from="1583073020543" duration="4885000" />
       <workItem from="1583156747331" duration="937000" />
       <workItem from="1583159328590" duration="143000" />
+      <workItem from="1590319939659" duration="3325000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
-    <option name="version" value="1" />
+    <option name="version" value="2" />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
       <map>
         <entry key="MAIN">
           <value>
-            <State>
-              <option name="COLUMN_ORDER" />
-            </State>
+            <State />
           </value>
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="418" y="210" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1590320028445">
+      <screen x="0" y="27" width="1920" height="1053" />
+    </state>
+    <state x="418" y="210" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.27.1920.1053@0.27.1920.1053" timestamp="1590320028445" />
+    <state x="1198" y="284" key="#xdebugger.evaluate" timestamp="1590327452066">
+      <screen x="0" y="27" width="1920" height="1053" />
+    </state>
+    <state x="1198" y="284" key="#xdebugger.evaluate/0.27.1920.1053@0.27.1920.1053" timestamp="1590327452066" />
+    <state width="1874" height="388" key="GridCell.Tab.0.bottom" timestamp="1590327555048">
+      <screen x="0" y="27" width="1920" height="1053" />
+    </state>
+    <state width="1874" height="388" key="GridCell.Tab.0.bottom/0.27.1920.1053@0.27.1920.1053" timestamp="1590327555048" />
+    <state width="1874" height="388" key="GridCell.Tab.0.center" timestamp="1590327555048">
+      <screen x="0" y="27" width="1920" height="1053" />
+    </state>
+    <state width="1874" height="388" key="GridCell.Tab.0.center/0.27.1920.1053@0.27.1920.1053" timestamp="1590327555048" />
+    <state width="1874" height="388" key="GridCell.Tab.0.left" timestamp="1590327555047">
+      <screen x="0" y="27" width="1920" height="1053" />
+    </state>
+    <state width="1874" height="388" key="GridCell.Tab.0.left/0.27.1920.1053@0.27.1920.1053" timestamp="1590327555047" />
+    <state width="1874" height="388" key="GridCell.Tab.0.right" timestamp="1590327555048">
+      <screen x="0" y="27" width="1920" height="1053" />
+    </state>
+    <state width="1874" height="388" key="GridCell.Tab.0.right/0.27.1920.1053@0.27.1920.1053" timestamp="1590327555048" />
+    <state width="1874" height="388" key="GridCell.Tab.1.bottom" timestamp="1590327555050">
+      <screen x="0" y="27" width="1920" height="1053" />
+    </state>
+    <state width="1874" height="388" key="GridCell.Tab.1.bottom/0.27.1920.1053@0.27.1920.1053" timestamp="1590327555050" />
+    <state width="1874" height="388" key="GridCell.Tab.1.center" timestamp="1590327555049">
+      <screen x="0" y="27" width="1920" height="1053" />
+    </state>
+    <state width="1874" height="388" key="GridCell.Tab.1.center/0.27.1920.1053@0.27.1920.1053" timestamp="1590327555049" />
+    <state width="1874" height="388" key="GridCell.Tab.1.left" timestamp="1590327555049">
+      <screen x="0" y="27" width="1920" height="1053" />
+    </state>
+    <state width="1874" height="388" key="GridCell.Tab.1.left/0.27.1920.1053@0.27.1920.1053" timestamp="1590327555049" />
+    <state width="1874" height="388" key="GridCell.Tab.1.right" timestamp="1590327555050">
+      <screen x="0" y="27" width="1920" height="1053" />
+    </state>
+    <state width="1874" height="388" key="GridCell.Tab.1.right/0.27.1920.1053@0.27.1920.1053" timestamp="1590327555050" />
+    <state x="449" y="187" key="SettingsEditor" timestamp="1590319993174">
+      <screen x="0" y="27" width="1920" height="1053" />
+    </state>
+    <state x="449" y="187" key="SettingsEditor/0.27.1920.1053@0.27.1920.1053" timestamp="1590319993174" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-method">
+          <url>file://$PROJECT_DIR$/src/GF.java</url>
+          <line>106</line>
+          <properties class="GF" method="divideByIndex">
+            <option name="EMULATED" value="true" />
+          </properties>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/Signature.java</url>
+          <line>60</line>
+          <option name="timeStamp" value="5" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/Gauss$Main.ic" NAME="Main Coverage Results" MODIFIED="1582572729336" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
