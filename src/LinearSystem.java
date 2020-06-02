@@ -26,7 +26,7 @@ public class LinearSystem {
         return true;
     }
 
-    public boolean[] sign(int[] S, int t, int[][]H, int[] check) {
+    public boolean[] sign(int[] S, int t) {
 
         do {
             generateSystem(t, S);
@@ -48,7 +48,7 @@ public class LinearSystem {
                 e[i] = true;
             }
             Syndrome = new int[2 * t];
-            int[] syn = Signature.multiplyMatrix(H,e);
+            //int[] syn = Signature.multiplyMatrix(H,e);
             for (int i = 0; i < Syndrome.length; i++) {
                 Syndrome[i] = generateS(i + 1, e);
                 if  (Syndrome[i] != S[i]) { //(syn[i] != check[i] ) {
