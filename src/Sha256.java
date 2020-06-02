@@ -150,6 +150,22 @@
             return buf.array();
         }
 
+        public static boolean[] intToBitArray(int[] ints, int length)
+        {
+           boolean[] res = new boolean[length];
+           String binary;
+           int index = 0;
+            for (int i = 0; i < ints.length; i++) {
+                binary = Integer.toBinaryString(ints[i]);
+                for(int j=0; j<binary.length(); j++) {
+                    res[index] = String.valueOf(binary.charAt(j)).equals("1");
+                    index++;
+                    if (index > length - 1) return res;
+                }
+            }
+            return res;
+        }
+
         private static int ch(int x, int y, int z)
         {
             return (x & y) | ((~x) & z);

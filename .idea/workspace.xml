@@ -22,18 +22,26 @@
     <list default="true" id="bf0e1baf-8350-4b2c-91d0-d710446d3a7c" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Gauss/GF.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Gauss/GF.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Gauss/LinearSystem$LinearlyDependentException.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Gauss/LinearSystem$LinearlyDependentException.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Gauss/LinearSystem$TooManySolutionsException.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Gauss/LinearSystem$TooManySolutionsException.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Gauss/LinearSystem.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Gauss/LinearSystem.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Gauss/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Gauss/Main.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Gauss/Sha256.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Gauss/Sha256.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Gauss/Signature.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Gauss/Signature.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/GF.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GF.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/LinearSystem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/LinearSystem.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Sha256.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Sha256.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Signature.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Signature.java" afterDir="false" />
     </list>
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FavoritesManager">
+    <favorites_list name="Sanich" />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -54,11 +62,23 @@
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../Laba2" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.0" />
     <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Mappings" />
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
   </component>
   <component name="RunManager">
     <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
@@ -95,23 +115,28 @@
       <workItem from="1583156747331" duration="937000" />
       <workItem from="1583159328590" duration="143000" />
       <workItem from="1590319939659" duration="3325000" />
+      <workItem from="1590386268362" duration="25847000" />
+      <workItem from="1590511813206" duration="42657000" />
+      <workItem from="1591114697714" duration="1562000" />
+      <workItem from="1591116290757" duration="856000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
-    <option name="version" value="2" />
+    <option name="version" value="1" />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="COLUMN_ORDER" />
+            </State>
           </value>
         </entry>
       </map>
     </option>
-    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="WindowStateProjectService">
     <state x="418" y="210" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1590320028445">
@@ -172,8 +197,8 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/Signature.java</url>
-          <line>95</line>
-          <option name="timeStamp" value="32" />
+          <line>40</line>
+          <option name="timeStamp" value="152" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

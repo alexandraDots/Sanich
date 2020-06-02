@@ -4,24 +4,26 @@ import static java.lang.Math.pow;
 import static java.util.Collections.binarySearch;
 
 public class Signature {
-    static int i = 1;
+     int[][] H;
+    int i = 1;
     static byte m = 5;
-    static int t = 2;
+    static int t = 4;
+    static int n = (int) pow(2, m) - 1;
     static LinearSystem system = new LinearSystem(m);
     private final int[][] Pt;
     private int[][] Hx;
     private final int[][] invertedX;
+    int[][] X ;
+    int [][] P;
 
     public Signature() {
-        int[][] X = generateX();
-        int[][] P = generateP();
+        X = generateX();
+        P = generateP();
+        H = generateH();
         Pt = transpose(P);
-        int[][] H = arrayListToArr(system.field.H);
         Hx = multiplyMatrix(X, H);
         Hx = multiplyMatrix(Hx, P);
-        invertedX = inverteMatrix(X);
-        int[][] pr = multiplyMatrix(invertedX, X);
-        System.out.println();
+        invertedX = invertMatrix(X);
     }
 
 
@@ -36,52 +38,87 @@ public class Signature {
             System.arraycopy(h, 0, s, 0, h.length);
             s[s.length - 1] = i;
             s = toIntArray(Sha256.hash(toByteArray(s)));
-            s = generateSyndrome(s);
-            if (s == null) {
-                i++;
-                continue;
-            }
-            s = multiplyMatrix(invertedX,s);
-            Syndrome = generateSyndrome(s);
+            boolean[] bits = Sha256.intToBitArray(s, m * t);
+            s = multiplyMatrix((invertedX), bits);
+            Syndrome = generateSyndrome(bitsToIntArray(s));
             if (Syndrome == null) {
                 i++;
                 continue;
             }
-            if ((b = system.sign(Syndrome, t)) != null)
-                return multiplyMatrix(Pt,b);
+            if ((b = system.sign(Syndrome, t, H, s)) != null) {
+                int[] result = new int[b.length];
+                for (int i = 0; i < Pt.length; i++) {
+                    for (int k = 0; k < b.length; k++) {
+                        if (Pt[i][k] == 1)
+                            result[i] = (b[k] ? 1 : 0);
+                    }
+                }
+                for (int k = 0; k < b.length; k++) {
+                    b[k] = (result[k] == 1);
+                }
+
+                return b;
+            }
             i++;
         }
     }
 
+    static boolean[] toBoolean(int[] s) {
+        boolean[] b = new boolean[s.length];
+        for (int k = 0; k < b.length; k++) {
+            b[k] = (s[k] == 1);
+        }
+        return b;
+    }
+
+    static int[] bitsToIntArray(int[] s) {
+        int[] res = new int[s.length / m];
+        for (int i = 0; i < res.length; i++) {
+            res[i] = 0;
+            for (int j = m - 1; j >= 0; j--)
+                res[i] = (res[i] << 1) | (s[i * m + j]);
+        }
+        return res;
+    }
 
 
-    public static boolean checkSignature(boolean[] e, int j, String M) {
+    public boolean checkSignature(boolean[] e, int j, String M) {
         byte[] message = M.getBytes();
         int[] h = toIntArray(Sha256.hash(message));
         int[] s = new int[h.length + 1];
         System.arraycopy(h, 0, s, 0, h.length);
         s[s.length - 1] = j;
         s = toIntArray(Sha256.hash(toByteArray(s)));
-        s = generateSyndrome(s);
-        return system.check(e, s, t);
+        boolean[] b1 = Sha256.intToBitArray(s, n);
+        boolean[] b2 = toBoolean(multiplyMatrix(Hx, e));
+        boolean flag = true;
+        for (int l = 0; l < b2.length; l++)
+            if (b1[l] != b2[l])
+                flag = false;
+        return flag;
 
     }
 
     int[][] generateX() {
-        int[][] X = new int[m * t][m * t];
+        int[][] X;
         do {
+            X = new int[m * t][m * t];
             for (int i = 0; i < m * t; i++) {
                 for (int j = 0; j < m * t; j++) {
-                    X[i][j] = (int) (Math.random() * (pow(2, m) - 1) + 1);
+                    if (i != j)
+                        X[i][j] = (int) (Math.random() * 2);
+                    else
+                        X[i][j] = 1;
                 }
             }
         } while (countDet(X) == 0);
+        //ToDo Добавить перестановку строк
         return X;
     }
 
     static int[] generateSyndrome(int S[]) {
         int s;
-        int[] Syndrome = new int[m * t];
+        int[] Syndrome = new int[2 * t];
         boolean[] H = new boolean[system.field.H.size()];
         // Sj
         for (int j = 1; j <= Syndrome.length; j++) {
@@ -89,7 +126,7 @@ public class Signature {
             if ((j) % 2 == 0)
                 Syndrome[j - 1] = system.field.powGF(Syndrome[j / 2 - 1], 2);
             else {
-                s = S[j / 2 + 1];
+                s = S[j / 2];
                 if (s == 0) return null;
                 for (int i = 0; i < system.field.H.size(); i++) {
                     if (H[i] && (binarySearch(system.field.H.get(i), s) >= 0))
@@ -102,18 +139,27 @@ public class Signature {
         return Syndrome;
     }
 
-    private int[][] arrayListToArr(ArrayList<ArrayList<Integer>> H) {
-        int[][] result = new int[m * t][(int) pow(2, m)];
-        for (int j = 0; j < result.length; j++) {
-            for (int k = 0; k < result[0].length; k++) {
-                result[i][k] = H.get(i).get(k % H.get(i).size());
+    private int[][] generateH() {
+        int alpha, a, b;
+        int[][] H = new int[m * t][n];
+        for (int j = 0; j < t; j++) {
+            a = 1;
+            alpha = system.field.arr[system.field.H.get(j).get(0) + 1];//system.field.arr[j + 2];
+            for (int k = 0; k < n; k++) {
+                b = a;
+                for (int l = 0; l < m; l++) {
+                    H[j * m + l][k] = b % 2;
+                    b /= 2;
+                }
+                a = system.field.multiply(a, alpha);
             }
         }
-        return result;
+        return H;
     }
 
+
     private int[][] transpose(int[][] P) {
-        int[][] transposedP = new int[P.length][P[0].length];
+        int[][] transposedP = new int[P[0].length][P.length];
         for (int j = 0; j < P.length; j++) {
             for (int k = 0; k < P[0].length; k++) {
                 transposedP[j][k] = P[k][j];
@@ -123,64 +169,66 @@ public class Signature {
     }
 
     private int[][] generateP() {
-        int n = (int) pow(2, m);
         int k;
-        boolean[] isUsed = new boolean[n];
+        ArrayList<Integer> arr = new ArrayList<Integer>(n);
+        for (int i = 0; i < n; i++)
+            arr.add(i);
         int[][] P = new int[n][n];
-        for (int j = 0; j < m * t; j++) {
-            do
-                k = (int) (Math.random() * (pow(2, m)));
-            while (isUsed[i]);
-            P[j][k] = 1;
+        for (int j = 0; j < n; j++) {
+            k = (int) (Math.random() * (arr.size()));
+            P[j][arr.get(k)] = 1;
+            arr.remove(k);
         }
         return P;
     }
 
     //найти обратную матрицу
-    int[][] inverteMatrix(int[][] matrix) {
-        if (countDet(matrix) == 0) return null;
+    int[][] invertMatrix(int[][] X) {
+        int[][] matrix = new int[X.length][X[0].length];
+        for (int j = 0; j < X.length; j++) {
+            System.arraycopy(X[j], 0, matrix[j], 0, matrix[j].length);
+        }
         int[][] tmpMatrix = new int[matrix.length][matrix.length * 2];
         for (int j = 0; j < tmpMatrix.length; j++) {
             System.arraycopy(matrix[j], 0, tmpMatrix[j], 0, matrix.length);
             tmpMatrix[j][j + matrix.length] = 1;
         }
-
         int a;
         int[] tmpRow;
         for (int i = 0; i < tmpMatrix.length; i++) {
-            for (int j = tmpMatrix[0].length - 1; j >= 0; j--) {
-                // Если і-ый элемент  равен 0 - поменять эту строку с той  где і-ый элемент !=0
-                for (int k = i; tmpMatrix[k][i] == 0; k++) {
-                    if (k + 1 >= tmpMatrix.length) {
-                        return null;
-                    }
-                    if (tmpMatrix[k + 1][i] != 0) {
-                        tmpRow = tmpMatrix[i];
-                        tmpMatrix[k + 1] = tmpMatrix[i];
-                        tmpMatrix[i] = tmpRow;
-                        break;
-                    }
+            // Если і-ый элемент  равен 0 - поменять эту строку с той  где і-ый элемент !=0
+            for (int k = i; tmpMatrix[k][i] == 0; k++) {
+                if (k + 1 >= tmpMatrix.length) {
+                    return null;
                 }
-                //Поделить строку на первый ненулевой элемент,
-                tmpMatrix[i][j] = system.field.divide(tmpMatrix[i][j], tmpMatrix[i][i]);
+                if (tmpMatrix[k + 1][i] != 0) {
+                    tmpRow = tmpMatrix[i];
+                    tmpMatrix[k + 1] = tmpMatrix[i];
+                    tmpMatrix[i] = tmpRow;
+                    break;
+                }
             }
             if (i == tmpMatrix.length - 1)
                 break;
             for (int row = i + 1; row < tmpMatrix.length; row++) {
                 a = tmpMatrix[row][i];
-                for (int col = 0; col < tmpMatrix[0].length; col++)
-                    //Вычесть iую строку, домноженую на коэфициэнт из всех остальных строк
-                    tmpMatrix[row][col] = tmpMatrix[row][col] ^ system.field.multiply(tmpMatrix[i][col], a);
+                //Вычесть iую строку, домноженую на коэфициэнт из всех остальных строк
+                if (a != 0)
+                    for (int col = 0; col < tmpMatrix[0].length; col++)
+                        tmpMatrix[row][col] = tmpMatrix[row][col] ^ tmpMatrix[i][col];
+
             }
         }
-        //последний индекс в строке
-        int k = tmpMatrix[0].length - 1;
         // в обратную сторону
         for (int i = tmpMatrix.length - 1; i > 0; i--) {
             for (int j = i - 1; j >= 0; j--) {
                 //Вычесть iую строку, домноженую на коэфициэнт из всех остальных строк
-                tmpMatrix[j][k] = tmpMatrix[j][k] ^ system.field.multiply(tmpMatrix[j][i], tmpMatrix[i][k]);
-                tmpMatrix[j][i] = tmpMatrix[j][i] ^ system.field.multiply(tmpMatrix[j][i], tmpMatrix[i][i]);
+                if (tmpMatrix[j][i] != 0) {
+                    tmpMatrix[j][i] ^= tmpMatrix[i][i];
+                    for (int l = matrix.length; l < tmpMatrix[0].length; l++) {
+                        tmpMatrix[j][l] ^= tmpMatrix[i][l];
+                    }
+                }
             }
         }
         for (int j = 0; j < tmpMatrix.length; j++) {
@@ -189,35 +237,31 @@ public class Signature {
         return matrix;
     }
 
-    //принимает квадратную матрицу и возвращает её детерминант
-    int countDet(int matrix[][]) {
+    void printMatrix(int[][] matrix) {
+        for (int j = 0; j < matrix.length; j++) {
+            for (int number : matrix[j])
+                System.out.print(number + " ");
+            System.out.println();
+        }
+    }
+
+    //принимает квадратную матрицу c единичной диагональю и возвращает её детерминант
+    int countDet(int X[][]) {
         int a;
+        int[][] matrix = new int[X.length][X[0].length];
+        for (int j = 0; j < X.length; j++) {
+            System.arraycopy(X[j], 0, matrix[j], 0, matrix[j].length);
+        }
+
         int[] tmpRow;
         boolean LinearlyDependent = false;
-        for (int i = 0; i < matrix.length; i++) {
-            for (int j = matrix[0].length - 1; j >= 0; j--) {
-                // Если і-ый элемент  равен 0 - поменять эту строку с той  где і-ый элемент !=0
-                for (int k = i; matrix[k][i] == 0; k++) {
-                    if (k + 1 >= matrix.length) {
-                        return 0;
-                    }
-                    if (matrix[k + 1][i] != 0) {
-                        tmpRow = matrix[i];
-                        matrix[k + 1] = matrix[i];
-                        matrix[i] = tmpRow;
-                        break;
-                    }
-                }
-                //Поделить строку на первый ненулевой элемент,
-                matrix[i][j] = system.field.divide(matrix[i][j], matrix[i][i]);
-            }
-            if (i == matrix.length - 1)
-                break;
+        for (int i = 0; i < matrix.length - 1; i++) {
             for (int row = i + 1; row < matrix.length; row++) {
                 a = matrix[row][i];
-                for (int col = 0; col < matrix[0].length; col++)
-                    //Вычесть iую строку, домноженую на коэфициэнт из всех остальных строк
-                    matrix[row][col] = matrix[row][col] ^ system.field.multiply(matrix[i][col], a);
+                if (a != 0)
+                    for (int col = 0; col < matrix[0].length; col++)
+                        //Вычесть iую строку, домноженую на коэфициэнт из всех остальных строк
+                        matrix[row][col] = matrix[row][col] ^ system.field.multiply(matrix[i][col], a);
             }
         }
         int det = matrix[0][0];
@@ -240,15 +284,16 @@ public class Signature {
         }
         return result;
     }
-    private boolean[] multiplyMatrix(int[][] matrix, boolean[] b) {
+
+    //Умнлжение на массив бит, возвращает массив бит
+    static int[] multiplyMatrix(int[][] matrix, boolean[] b) {
         if (matrix[0].length != b.length)
             return null;
-        boolean[] result = new boolean[b.length];
-
+        int[] result = new int[matrix.length];
         for (int i = 0; i < matrix.length; i++) {
             for (int k = 0; k < b.length; k++) {
-                if (matrix[i][k] == 1)
-                    result[i] = b[k];
+                if (b[k])
+                    result[i] ^= matrix[i][k];
             }
         }
         return result;
@@ -275,7 +320,7 @@ public class Signature {
     private static int[] toIntArray(byte[] byteArr) {
         int[] intArr = Sha256.toIntArray(byteArr);
         for (int i = 0; i < intArr.length; i++) {
-            intArr[i] = Math.abs(intArr[i]) % ((int) pow(2, m) - 1) + 1;
+            intArr[i] = Math.abs(intArr[i]) % n + 1;
         }
         return intArr;
     }

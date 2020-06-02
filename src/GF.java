@@ -50,6 +50,8 @@ public class GF {
 
     public int multiply(int a, int b) {
         int result = 0;
+        if (a==0||b==0)
+            return 0;
         int x = a;
         if (b % 2 != 0)
             result = a;
@@ -57,13 +59,35 @@ public class GF {
         while (b > 0) {
             x = multiplyByX(x);
             if (b % 2 == 1)
-                result = result ^ x;
+                result = add(result,x);
             b = b / 2;
         }
         return result;
     }
+    public int multiplyWithCheck(int a, int b) {
+        boolean pA, pX = countParity(a);
+        boolean pp = true;
+        int B = b;
+        int result = 0;
+        int x = a;
+        while (b > 0) {
+            pp = pp == (countParity(b % 2) | pX);
+            if (b % 2 == 1)
+                result = add(result, x);
+            b = b >> 1;
+            pX = pX == countParity(x >> (m - 1));
+            x = multiplyByX(x);
+            if (pX != countParity(x))
+                System.out.println("Predicted parity of X " +
+                        "doesn't match the actual parity of X");
+        }
+        if (pp != countParity(result))
+            System.out.println("Predicted parity of multiply modulo" +
+                    " doesn't match the actual parity");
+        return result;
+    }
 
-    private int multiplyByX(int a) {
+    int multiplyByX(int a) {
         if (a >> (m - 1) != 0)
             return a << 1 ^ g;
         return a << 1;
@@ -112,6 +136,40 @@ public class GF {
         while (diff < 0)
             diff += (int)(pow(2,m)) - 1;
         return diff;
+    }
+    int multiplyByXWithCheck(int a) {
+        boolean pp = countParity(a) == countParity(a >> (m - 1));
+        int result;
+        if (a >> (m - 1) != 0)
+            result = a << 1 ^ g;
+        else
+            result = a << 1;
+        if (pp == countParity(result))
+            return result;
+        else
+            try {
+                throw new Exception("The error has occurred. " +
+                        "Predicted parity of alpha module doesn't match the real one");
+            } catch (Exception e) {
+                e.printStackTrace();
+                //System.out.println(e.getMessage());
+                return result;
+            }
+    }
+
+    public int addWithCheck(int a, int b) {
+        boolean pp = countParity(a) == countParity(b);
+        if (countParity(a ^ b) == pp)
+            return a ^ b;
+        else
+            try {
+                throw new Exception("The error has occurred. " +
+                        "Predicted parity of sum doesn't match the real one");
+            } catch (Exception e) {
+                e.printStackTrace();
+                return -1;
+            }
+
     }
 
     public int getRow(int element){
@@ -220,6 +278,16 @@ public class GF {
             }
         }
 
+    }
+
+    // true - even, false - odd
+    public boolean countParity(int n) {
+        int p = 0;
+        while (n > 0) {
+            p = p ^ (n % 2);
+            n = n >> 1;
+        }
+        return p == 0;
     }
     public int addByIndex(int a, int b) {
         return index_of[arr[a+1]^arr[b+1]] - 1;

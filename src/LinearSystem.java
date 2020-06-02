@@ -26,7 +26,7 @@ public class LinearSystem {
         return true;
     }
 
-    public boolean[] sign(int[] S, int t) {
+    public boolean[] sign(int[] S, int t, int[][]H, int[] check) {
 
         do {
             generateSystem(t, S);
@@ -41,17 +41,17 @@ public class LinearSystem {
         } while (!isLinearlyIndependent() && t != 0);
 
         //проверка
-        boolean[] e = new boolean[(int) Math.pow(2, m)];
+        boolean[] e = new boolean[(int) Math.pow(2, m) - 1];
         //если t == 0 проверить S = 0
         if (t != 0) {
             for (Integer i : findRoots()) {
                 e[i] = true;
             }
             Syndrome = new int[2 * t];
-            for (int i = 0; i < 2 * t; i++) {
-                //S[0] = S1
+            int[] syn = Signature.multiplyMatrix(H,e);
+            for (int i = 0; i < Syndrome.length; i++) {
                 Syndrome[i] = generateS(i + 1, e);
-                if (Syndrome[i] != S[i]) {
+                if  (Syndrome[i] != S[i]) { //(syn[i] != check[i] ) {
                     return null;
                 }
             }
@@ -160,6 +160,7 @@ public class LinearSystem {
 
     public void generateSystem(int mistakes, int[] S) {
         system = new int[mistakes][mistakes + 1];
+        //system[0][0] = 1; //*
         for (int i = 0; i < mistakes; i++) {
             System.arraycopy(S, i, system[i], 0, mistakes + 1);
         }
