@@ -48,7 +48,6 @@ public class LinearSystem {
                 e[i] = true;
             }
             Syndrome = new int[2 * t];
-            //int[] syn = Signature.multiplyMatrix(H,e);
             for (int i = 0; i < Syndrome.length; i++) {
                 Syndrome[i] = generateS(i + 1, e);
                 if  (Syndrome[i] != S[i]) { //(syn[i] != check[i] ) {
@@ -83,31 +82,32 @@ public class LinearSystem {
         int[] tmpRow;
         boolean LinearlyDependent = false;
         for (int i = 0; i < system.length; i++) {
-            for (int j = system[0].length - 1; j >= 0; j--) {
-                // Если і-ый элемент  равен 0 - поменять эту строку с той  где і-ый элемент !=0
-                for (int k = i; system[k][i] == 0; k++) {
-                    if (k + 1 >= system.length) {
-                        //checkSystemOK();
-                        LinearlyDependent = true;
-                        break;
-                    }
-                    if (system[k + 1][i] != 0) {
-                        tmpRow = system[i];
-                        system[k + 1] = system[i];
-                        system[i] = tmpRow;
-                        break;
-                    }
+            // Если і-ый элемент  равен 0 - поменять эту строку с той  где і-ый элемент !=0
+            for (int k = i; system[i][i] == 0; k++) {
+                if (k + 1 >= system.length) {
+                    checkSystemOK();
+                    LinearlyDependent = true;
+                    throw new LinearlyDependentException("System isn't LinearlyIndependent");
                 }
-                //Поделить строку на первый ненулевой элемент,
+                if (system[k + 1][i] != 0) {
+                    tmpRow = system[k+1];
+                    system[k + 1] = system[i];
+                    system[i] = tmpRow;
+                    break;
+                }
+            }
+            for (int j = system[0].length - 1; j >= 0; j--) {
+                 //Поделить строку на первый ненулевой элемент,
                 system[i][j] = field.divide(system[i][j], system[i][i]);
             }
             if (i == system.length - 1)
                 break;
             for (int row = i + 1; row < system.length; row++) {
                 a = system[row][i];
+
                 for (int col = 0; col < system[0].length; col++)
                     //Вычесть iую строку, домноженую на коэфициэнт из всех остальных строк
-                    system[row][col] = system[row][col] ^ field.multiply(system[i][col], a);
+                    system[row][col] = field.addWithCheck(system[row][col] , field.multiplyWithCheck(system[i][col], a));
             }
         }
         //последний индекс в строке
@@ -116,8 +116,8 @@ public class LinearSystem {
         for (int i = system.length - 1; i > 0; i--) {
             for (int j = i - 1; j >= 0; j--) {
                 //Вычесть iую строку, домноженую на коэфициэнт из всех остальных строк
-                system[j][k] = system[j][k] ^ field.multiply(system[j][i], system[i][k]);
-                system[j][i] = system[j][i] ^ field.multiply(system[j][i], system[i][i]);
+                system[j][k] = field.addWithCheck(system[j][k] , field.multiplyWithCheck(system[j][i], system[i][k]));
+                system[j][i] = field.addWithCheck(system[j][i] , field.multiplyWithCheck(system[j][i], system[i][i]));
             }
         }
         checkSystemOK();
@@ -152,7 +152,7 @@ public class LinearSystem {
         else
             for (int j = 0; j < e.length; j++) {
                 if (e[j]) {
-                    s = s ^ field.powGFByIndex(i, j);
+                    s = field.addWithCheck(s , field.powGFByIndex(i, j));
                 }
             }
         return s;
@@ -192,8 +192,8 @@ public class LinearSystem {
     public int hornerMethod(int x) {
         int res = 1;
         for (int i = ai.length - 1; i >= 0; i--) {
-            res = field.multiply(res, x);
-            res = res ^ ai[i];
+            res = field.multiplyWithCheck(res, x);
+            res = field.addWithCheck(res,ai[i]);
         }
         return (res);
     }

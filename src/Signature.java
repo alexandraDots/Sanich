@@ -9,16 +9,20 @@ import static java.util.Collections.binarySearch;
 
 public class Signature {
     int i = 1;
-    static byte m = 11;
-    static int t = 68;
-    static int n = (int) pow(2, m) - 1;
-    static LinearSystem system = new LinearSystem(m);
+    static byte m;
+    static int t;
+    static int n;
+    static LinearSystem system ;
     private final boolean[][] Pt;
     private boolean[][] Hx;
     private final boolean[][] invertedX;
     private Keys keys;
 
-    public Signature() {
+    public Signature(byte m, int t) {
+        this.m = m;
+        this.t = t;
+        n =   (int) pow(2, m) - 1;
+        system = new LinearSystem(m);
         boolean[][] X = generateX();
         boolean[][] P = generateP();
         boolean[][] H = generateH();
@@ -43,6 +47,9 @@ public class Signature {
         invertedX = keys.getInvertedX();
         Pt = keys.getPt();
         m = keys.m;
+        t = keySet.t;
+        n =   (int) pow(2, m) - 1;
+        system = new LinearSystem(m);
     }
 
     public boolean[] signature(String M) {

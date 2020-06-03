@@ -9,6 +9,7 @@ public class Main {
     public static void main(String[] args) {
         String M = "Hello, I am Sasha";
         Keys keys;
+        //Signature s = new Signature((byte) 8,9);
         try(ObjectInputStream ois = new ObjectInputStream(new FileInputStream("keys.dat")))
         {
             keys=(Keys)ois.readObject();
@@ -18,14 +19,14 @@ public class Main {
             System.out.println(booleansToInt(b));
             System.out.println(s.i);
             System.out.println(s.checkSignature(b, s.i, M));
-            System.out.println("Time in millis" + (System.currentTimeMillis()-time));
+            System.out.println("Time in millis with (without x) " + (System.currentTimeMillis()-time));
         }
         catch(Exception ex){
-            System.out.println(ex.getMessage());
+            ex.printStackTrace();
         }
 
 
-    }
+   }
 
     static long booleansToInt(boolean[] arr) {
         long n = 0;

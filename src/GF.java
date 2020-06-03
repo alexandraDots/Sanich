@@ -77,9 +77,6 @@ public class GF {
             b = b >> 1;
             pX = pX == countParity(x >> (m - 1));
             x = multiplyByX(x);
-            if (pX != countParity(x))
-                System.out.println("Predicted parity of X " +
-                        "doesn't match the actual parity of X");
         }
         if (pp != countParity(result))
             System.out.println("Predicted parity of multiply modulo" +
@@ -167,7 +164,7 @@ public class GF {
                         "Predicted parity of sum doesn't match the real one");
             } catch (Exception e) {
                 e.printStackTrace();
-                return -1;
+                return a ^ b;
             }
 
     }
